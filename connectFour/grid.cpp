@@ -19,16 +19,17 @@ Grid::Grid()
 	}
 }
 
-Board::~Board()
+Grid::~Grid()
 {
 	for (int i{}; i < 6; i++)
 	{
 		delete[] toks[i];
 	}
 	delete[] toks;
+    toks = nullptr;
 }
 
-void Board::draw()
+void Grid::draw()
 {
     /*
 	ofFill();
@@ -37,11 +38,33 @@ void Board::draw()
 	ofDrawRectangle(x - 20, y + height, width / 8, height / 10);
 	ofDrawRectangle(x + width - width/8 + 20, y + height, width / 8, height / 10);
     */
+    for (int i{1}; i < 8; i++)
+    {
+        cout << " " << i;
+    }
+    cout << endl;
 	for (int i{}; i < 6; i++)
 	{
 		for (int j{}; j < 7; j++)
 		{
+            cout << '|';
 			toks[i][j].draw();
 		}
+        cout << '|' << endl;
 	}
+}
+
+bool Grid::drop(int col, char x)
+{
+    col--;
+    for(int i{5}; i >=0; i--)
+    {
+        if (!toks[i][col].filled)
+        {
+            toks[i][col].setFilled(x);
+            return true;
+        }
+    }
+    cout << "full" << endl;
+    return false;
 }

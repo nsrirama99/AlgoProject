@@ -5,7 +5,13 @@ Token::Token()
     x = 0;
     y = 0;
     filled = false;
-    acii = ' ';
+    ascii = ' ';
+}
+
+void Token::setXY(int xL, int yL)
+{
+    x = xL;
+    y = yL;
 }
 
 void Token::setFilled(int r, int g, int b)
@@ -35,7 +41,7 @@ void Token::draw()
 	}
 	else
 	{
-        cout << ' ';
+        cout << '_';
 		/*ofFill();
 		ofSetColor(200);
 		ofDrawCircle(x, y, 45);*/

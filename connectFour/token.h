@@ -1,9 +1,12 @@
 #ifndef TOKEN_H
 #define TOKEN_H
+#include <iostream>
 
+using namespace std;
 
 class Token
 {
+    friend class Grid;
 private:
     //screen location for GUI
     int x;
@@ -13,7 +16,7 @@ private:
     char ascii;
 public:
     Token();
-    void setXY(int xL, int yL): x(xL), y(yL) {}
+    void setXY(int xL, int yL);
     void setFilled(int r, int g, int b);
     void draw();
     void setFilled(char x);
