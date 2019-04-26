@@ -4,4 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    grid.cpp \
+    token.cpp
+
+HEADERS += \
+    grid.h \
+    token.h
