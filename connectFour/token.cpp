@@ -6,6 +6,7 @@ Token::Token()
     y = 0;
     filled = false;
     ascii = ' ';
+    player = -1;
 }
 
 void Token::setXY(int xL, int yL)
@@ -48,4 +49,7 @@ void Token::draw()
 	}
 }
 
+void Token::setPlayer(int x) {
+    player = x;
+}
 

@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = connectFour1.0.0
-DISTDIR = /home/student/Desktop/CSE3353/AlgoProject/build-connectFour-Desktop_Qt_5_10_0_GCC_64bit-Debug/.tmp/connectFour1.0.0
+DISTDIR = /home/student/Desktop/AlgoProject/AlgoProject/build-connectFour-Desktop_Qt_5_10_0_GCC_64bit-Debug/.tmp/connectFour1.0.0
 LINK          = g++
 LFLAGS        = 
 LIBS          = $(SUBLIBS)  
@@ -219,6 +219,7 @@ DIST          = ../../../../Qt/5.10.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/spec_post.prf \
+		../connectFour/.qmake.stash \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -410,6 +411,7 @@ Makefile: ../connectFour/connectFour.pro ../../../../Qt/5.10.0/gcc_64/mkspecs/li
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../../../Qt/5.10.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -588,6 +590,7 @@ Makefile: ../connectFour/connectFour.pro ../../../../Qt/5.10.0/gcc_64/mkspecs/li
 ../../../../Qt/5.10.0/gcc_64/mkspecs/features/qt_config.prf:
 ../../../../Qt/5.10.0/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../../../Qt/5.10.0/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../Qt/5.10.0/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../../Qt/5.10.0/gcc_64/mkspecs/features/toolchain.prf:
 ../../../../Qt/5.10.0/gcc_64/mkspecs/features/default_pre.prf:

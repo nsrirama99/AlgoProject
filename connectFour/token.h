@@ -11,6 +11,7 @@ private:
     //screen location for GUI
     int x;
     int y;
+    int player;
     //ofColor col;
     bool filled;
     char ascii;
@@ -20,6 +21,7 @@ public:
     void setFilled(int r, int g, int b);
     void draw();
     void setFilled(char x);
+    void setPlayer(int x);
 };
 
 #endif // TOKEN_H
