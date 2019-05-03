@@ -11,9 +11,9 @@ int main()
     g->draw();
     bool dropping = true;
     int play = 0;
+    int col{};
     while (dropping)
     {
-        int col;
         cout << "choose column (0 to exit)" << endl;
         cin >> col;
 
@@ -33,7 +33,14 @@ int main()
 
         g->drop(col, tok, play);
         g->draw();
-        cout << g->checkVertical(0, play);
+        g->setScore(col, play);
+        cout << g->getScore() << endl;
+
+        if (g->won(col, play))
+        {
+            cout << play << " won!" << endl;
+            break;
+        }
 
         if(play == 0)
             play = 1;

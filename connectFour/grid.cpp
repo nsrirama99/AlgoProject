@@ -1,5 +1,5 @@
 #include "grid.h"
-
+//prefer middle and bottom as ai when there is not a clear choice
 Grid::Grid()
 {
     height = 640;
@@ -85,12 +85,25 @@ void Grid::unDrop(int col) {
     }
 }
 
-void Grid::setScore(int p) {
+void Grid::setScore(int col, int p) {
+    col--;
+    int row{};
+    for (int i{}; i < 6; i++)
+    {
+        if (toks[i][col].filled)
+        {
+            row = i;
+            break;
+        }
+    }
+
     int scor = 0;
     int inRow = 1;
-    for(int j = 0; j < 6; j++){
+    /*for(int j = 0; j < 6; j++){
                 checkHorizontal(j, p);
-    } //end loop through rows
+    } *///end loop through rows
+    score = checkDiagonal(row, col, p);
+
 } //end set score
 
 int Grid::checkHorizontal(int row, int p) {
@@ -163,4 +176,192 @@ int Grid::checkVertical(int col, int p) {
     return tinRowt;
 }
 
+int Grid::checkDiagonal(int row, int col, int p)
+{
+    int tinRow{};
+    int tinRowt{};
+    int lastPlayerDist{4};
+    //check top left to bottom right
+    if ((row > 2 && col < 3) || (row < 3 && col > 3))
+    {
+        //bad
+        goto rtol;
+    }
+    else
+    {
+        int trow = row-6;
+        int tcol = col-6;
+        while (trow < 0 || tcol < 0)
+        {
+            trow++;
+            tcol++;
+        }
+        while (trow < 6 && tcol < 7)
+        {
+            if (toks[trow][tcol].player == p)
+            {
+                tinRowt++;
+                lastPlayerDist = 1;
+            }
+            else if (!toks[trow][tcol].filled)
+            {
+                lastPlayerDist++;
+                if (lastPlayerDist > 3)
+                {
+                    if (tinRowt > tinRow) {tinRow = tinRowt;}
+                    tinRowt = 0;
+                }
+            }
+            else
+            {
+                if (tinRowt > tinRow) {tinRow = tinRowt;}
+                tinRowt = 0;
+            }
+            trow++;
+            tcol++;
+        }
+        if (tinRowt > tinRow) {tinRow = tinRowt;}
+        tinRowt = 0;
+    }
+rtol: //check top right to bottom left
+    if ((row < 3 && col < 3) || (row > 2 && col > 3))
+    {
+        return false;
+    }
+    else
+    {
+        int trow = row-6;
+        int tcol = col+6;
+        while (trow < 0 || tcol > 6)
+        {
+            trow++;
+            tcol--;
+        }
+        while (trow < 6 && tcol >= 0)
+        {
+            if (toks[trow][tcol].player == p)
+            {
+                tinRowt++;
+                lastPlayerDist = 1;
+            }
+            else if (!toks[trow][tcol].filled)
+            {
+                lastPlayerDist++;
+                if (lastPlayerDist > 3)
+                {
+                    if (tinRowt > tinRow) {tinRow = tinRowt;}
+                    tinRowt = 0;
+                }
+            }
+            else
+            {
+                if (tinRowt > tinRow) {tinRow = tinRowt;}
+                tinRowt = 0;
+            }
+            trow++;
+            tcol--;
+        }
+        if (tinRowt > tinRow) {tinRow = tinRowt;}
+        tinRowt = 0;
+    }
+    return tinRow;
+}
+
 int Grid::getScore() { return score; }
+
+bool Grid::won(int col, int p)
+{
+    col--;
+    int row{};
+    for (int i{}; i < 6; i++)
+    {
+        if (toks[i][col].filled)
+        {
+            row = i;
+            break;
+        }
+    }
+
+    if (wonHorizontal(row, p))
+        return true;
+    else if (wonVertical(col, p))
+        return true;
+    else
+        return wonDiagonal(col, row, p);
+}
+
+bool Grid::wonHorizontal(int row, int p)
+{
+    for (int i{}; i < 4; i++)
+    {
+        if (toks[row][i].player == p && toks[row][i+1].player == p && toks[row][i+2].player == p && toks[row][i+3].player == p)
+            return true;
+    }
+    return false;
+}
+
+bool Grid::wonVertical(int col, int p)
+{
+    for (int i{}; i < 3; i++)
+    {
+        if (toks[i][col].player == p && toks[i+1][col].player == p && toks[i+2][col].player == p && toks[i+3][col].player == p)
+            return true;
+    }
+    return false;
+}
+
+bool Grid::wonDiagonal(int col, int row, int p)
+{
+    //check top left to bottom right
+    if ((row > 2 && col < 3) || (row < 3 && col > 3))
+    {
+        //bad
+        goto rtol;
+    }
+    else
+    {
+        int trow = row-3;
+        int tcol = col-3;
+        while (trow < 0 || tcol < 0)
+        {
+            trow++;
+            tcol++;
+        }
+        while (trow + 3 < 6 && tcol + 3 < 7)
+        {
+            if (toks[trow][tcol].player == p && toks[trow + 1][tcol + 1].player == p && toks[trow+2][tcol+2].player == p && toks[trow + 3][tcol + 3].player == p)
+                return true;
+            trow++;
+            tcol++;
+        }
+    }
+rtol: //check top right to bottom left
+    if ((row < 3 && col < 3) || (row > 2 && col > 3))
+    {
+        return false;
+    }
+    else
+    {
+        int trow = row-3;
+        int tcol = col+3;
+        while (trow < 0 || tcol > 6)
+        {
+            trow++;
+            tcol--;
+        }
+        while (trow + 3 < 6 && tcol - 3 >= 0)
+        {
+            if (toks[trow][tcol].player == p && toks[trow + 1][tcol - 1].player == p && toks[trow+2][tcol-2].player == p && toks[trow + 3][tcol - 3].player == p)
+                return true;
+            trow++;
+            tcol--;
+        }
+    }
+    return false;
+}
+
+
+
+
+
+
