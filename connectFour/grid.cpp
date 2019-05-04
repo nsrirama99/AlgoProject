@@ -100,13 +100,64 @@ int Grid::setScore(int col, int p) {
     if(won(col, p)) {
         score = 100;
     } else {
-        score = max(max(checkHorizontal(row, p), checkVertical(col, p)), checkDiagonal(row, col, p));
+        score = checkHorizontal(row, p) + checkVertical(col, p) + checkDiagonal(row, col, p);
     }
-
     if(p == 0)
         score*=-1;
     return score;
 } //end set score
+
+
+int Grid::makeRandomMove(int col, int p){
+    srand(time(0));
+    int i = 0;
+    int p = 0;
+    int q =0;
+    bool notDrop = true;
+    while(notDrop){
+        int arr[3];
+        i = (rand()%7 + 1);
+        do{
+            q = (rand()%7 + 1);
+        }while(q==i);
+        do{
+             p = (rand()%7 + 1);
+        }while(p==i || p==q);
+        arr = [i, p, q];
+        int arrX[3] = {100,100,100};
+        int arrY[3] = {100,100,100};
+        int row;
+        for(int j =0; j<3;j++){
+            if(drop(arr[j], 'x', p)){
+                notDrop = false;
+                for (int i{}; i < 6; i++)
+                {
+                    if (toks[i][arr[j]-1].filled)
+                    {
+                        row = i;
+                        break;
+                    }
+                }
+                arrX[i] = arr[j]-1;
+                arrY[i] = row;
+                unDrop(arr[j]);
+            }
+        }
+     }
+     int positionScore = abs(7-arrX[0]-arrY[0]);
+     int position = 0;
+     if(abs(7-arrX[1] - arrY[1]) < positionScore){
+         positionScore = abs(7-arrX[1] - arrY[1]);
+         position = 1;
+     }
+     if(abs(7-arrX[2] - arrY[2]) < positionScore){
+         positionScore = abs(7-arrX[2] - arrY[2]);
+         position = 2;
+     }
+     return arr[position];
+     //heuristic - manhattan distance
+}
+
 
 int Grid::checkHorizontal(int row, int p) {
         int tinRow = 0;

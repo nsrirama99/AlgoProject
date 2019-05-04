@@ -2,6 +2,7 @@
 #define GRID_H
 #include "token.h"
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
     int checkDiagonal(int row, int col, int p);
     void unDrop(int col);
     bool won(int col, int p);
+    int makeRandomMove(int col, int p);
 
 };
 
