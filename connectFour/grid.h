@@ -20,6 +20,8 @@ private:
     bool wonHorizontal(int row, int p);
     bool wonVertical(int col, int p);
     bool wonDiagonal(int col, int row, int p);
+    int makeRandomMove();
+    int makeIntelMove();
 public:
     Grid();
     ~Grid();
@@ -32,8 +34,7 @@ public:
     int checkDiagonal(int row, int col, int p);
     void unDrop(int col);
     bool won(int col, int p);
-    int makeRandomMove(int col, int p);
-
+    int makeAIMove();
 };
 
 

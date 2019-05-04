@@ -2,6 +2,7 @@
 //prefer middle and bottom as ai when there is not a clear choice
 Grid::Grid()
 {
+    srand(time(0));
     height = 640;
     width = 740;
     //x = (ofGetWidth() - width) / 2;
@@ -81,8 +82,112 @@ void Grid::unDrop(int col) {
             toks[i][col].filled = false;
             toks[i][col].ascii = ' ';
             toks[i][col].setPlayer(-1);
+            return;
         }
     }
+}
+
+int Grid::makeAIMove() {
+    int col;
+    if((int)rand()%4 == 3) {
+        col = makeRandomMove();
+    } else {
+        col = makeIntelMove();
+    }
+    return col;
+    //drop(col, 'x', 1);
+}//makeAIMove
+
+int Grid::makeIntelMove() {
+    int scores[7][8];
+    for(int j = 0; j < 7; j++) {
+        if(!drop(j+1, 'x', 1))
+            continue;
+        if(won(j+1, 1)) {
+            unDrop(j+1);
+            return j+1;
+        }
+        scores[j][0] = setScore(j+1, 1);
+        for(int k = 1; k < 8; k++) {
+            if(!drop(k, 'o', 0))
+                scores[j][k] = -1000;
+            else {
+                if(won(k, 0) && j != k+1) {
+                    unDrop(j+1);
+                    unDrop(k);
+                    return k;
+                }
+                scores[j][k] = setScore(k, 0) + scores[j][0];
+                unDrop(k);
+            }
+        }
+        unDrop(j+1);
+        scores[j][0] = scores[j][1];
+        for(int k = 2; k < 8; k++) {
+            if(scores[j][0] > scores[j][k])
+                scores[j][0] = scores[j][k];
+        }
+    }
+    int finalCol = 0;
+    int max = scores[0][0];
+    for(int j = 1; j < 7; j++) {
+        if(scores[j][0] > max) {
+            max = scores[j][0];
+            finalCol = j;
+        }
+    }
+    return finalCol + 1;
+}
+
+int Grid::makeRandomMove(){
+    int a = 0; //i
+    int b = 0; //p
+    int c =0; //q
+    bool notDrop = true;
+    int arr[3];
+    int arrX[3] = {100,100,100};
+    int arrY[3] = {100,100,100};
+    while(notDrop){
+        a = (rand()%7 + 1);
+        do{
+            b = (rand()%7 + 1);
+        }while(b==a);
+        do{
+             c = (rand()%7 + 1);
+        }while(c==a || c==b);
+        arr[0] = a;
+        arr[1] = b;
+        arr[2] = c;
+        int row;
+        for(int j =0; j<3;j++){
+            if(drop(arr[j], 'x', 1)){
+                notDrop = false;
+                for (int i{}; i < 6; i++)
+                {
+                    if (toks[i][arr[j]-1].filled)
+                    {
+                        row = i;
+                        break;
+                    }
+                }
+                arrX[j] = arr[j]-1;
+                arrY[j] = row;
+                unDrop(arr[j]);
+            }
+        }
+     }
+     int positionScore = abs(8-arrX[0]+arrY[0]);
+     int position = 0;
+     if(abs(8-arrX[1] + arrY[1]) < positionScore){
+         positionScore = abs(8-arrX[1] + arrY[1]);
+         position = 1;
+     }
+     if(abs(8-arrX[2] + arrY[2]) < positionScore){
+         positionScore = abs(8-arrX[2] + arrY[2]);
+         position = 2;
+     }
+     return arr[position];
+     //heuristic - manhattan distance
 }
 
 int Grid::setScore(int col, int p) {
@@ -98,7 +203,7 @@ int Grid::setScore(int col, int p) {
     }
 
     if(won(col, p)) {
-        score = 100;
+        score = 1000;
     } else {
         score = checkHorizontal(row, p) + checkVertical(col, p) + checkDiagonal(row, col, p);
     }
@@ -106,57 +211,6 @@ int Grid::setScore(int col, int p) {
         score*=-1;
     return score;
 } //end set score
-
-
-int Grid::makeRandomMove(int col, int p){
-    srand(time(0));
-    int i = 0;
-    int p = 0;
-    int q =0;
-    bool notDrop = true;
-    while(notDrop){
-        int arr[3];
-        i = (rand()%7 + 1);
-        do{
-            q = (rand()%7 + 1);
-        }while(q==i);
-        do{
-             p = (rand()%7 + 1);
-        }while(p==i || p==q);
-        arr = [i, p, q];
-        int arrX[3] = {100,100,100};
-        int arrY[3] = {100,100,100};
-        int row;
-        for(int j =0; j<3;j++){
-            if(drop(arr[j], 'x', p)){
-                notDrop = false;
-                for (int i{}; i < 6; i++)
-                {
-                    if (toks[i][arr[j]-1].filled)
-                    {
-                        row = i;
-                        break;
-                    }
-                }
-                arrX[i] = arr[j]-1;
-                arrY[i] = row;
-                unDrop(arr[j]);
-            }
-        }
-     }
-     int positionScore = abs(7-arrX[0]-arrY[0]);
-     int position = 0;
-     if(abs(7-arrX[1] - arrY[1]) < positionScore){
-         positionScore = abs(7-arrX[1] - arrY[1]);
-         position = 1;
-     }
-     if(abs(7-arrX[2] - arrY[2]) < positionScore){
-         positionScore = abs(7-arrX[2] - arrY[2]);
-         position = 2;
-     }
-     return arr[position];
-     //heuristic - manhattan distance
-}
 
 
 int Grid::checkHorizontal(int row, int p) {
