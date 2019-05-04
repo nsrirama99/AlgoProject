@@ -24,7 +24,7 @@ public:
     ~Grid();
     void draw();
     bool drop(int col, char x, int p);
-    void setScore(int col, int p);
+    int setScore(int col, int p);
     int getScore();
     int checkHorizontal(int row, int p);
     int checkVertical(int col, int p);

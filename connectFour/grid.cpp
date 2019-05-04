@@ -85,7 +85,7 @@ void Grid::unDrop(int col) {
     }
 }
 
-void Grid::setScore(int col, int p) {
+int Grid::setScore(int col, int p) {
     col--;
     int row{};
     for (int i{}; i < 6; i++)
@@ -97,13 +97,15 @@ void Grid::setScore(int col, int p) {
         }
     }
 
-    int scor = 0;
-    int inRow = 1;
-    /*for(int j = 0; j < 6; j++){
-                checkHorizontal(j, p);
-    } *///end loop through rows
-    score = checkDiagonal(row, col, p);
+    if(won(col, p)) {
+        score = 100;
+    } else {
+        score = max(max(checkHorizontal(row, p), checkVertical(col, p)), checkDiagonal(row, col, p));
+    }
 
+    if(p == 0)
+        score*=-1;
+    return score;
 } //end set score
 
 int Grid::checkHorizontal(int row, int p) {
